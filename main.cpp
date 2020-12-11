@@ -1,4 +1,3 @@
-
 #include <fcntl.h>
 #include <iostream>
 #include <string.h>
@@ -96,6 +95,7 @@ void detach_server_process(const Data _data, pid_t _pid, pid_t _sid) {
     }
 }
 
+// TODO: should be realized factory method.
 void command_handler(COMMANDS _command, const Data &_data) {
     pid_t pid, sid;
     switch (_command) {
