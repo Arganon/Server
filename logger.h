@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <linux/kernel.h>
 
+// TODO: сделать возможность добавления большого количества аргументов в LOG
 #define LOG(loglevel, message) Logger::Log(loglevel, message, __FILE__, __LINE__)
 
 ///@brief Enum class with a few types of a log levels.
