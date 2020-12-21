@@ -20,7 +20,7 @@ size_t ThreadPool::get_count_of_active_tasks() noexcept {
 void ThreadPool::set_thread_quantity(const int _amount) noexcept {
     m_is_stopping = false;
     if (_amount < 1) {
-        LOG(LOG_LVL::DEBUG, "Value of the thread amount is less than 1.");
+        LOG(LOG_LVL::LOGS::DEBUG, "Value of the thread amount is less than 1.");
         return;
     }
     start(_amount);

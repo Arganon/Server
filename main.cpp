@@ -17,7 +17,7 @@ void run_server(const Data &_data) {
     int pid_num = open("a.pid", O_RDONLY);
 
     if (pid_num > 0) {
-        LOG(LOG_LVL::DEBUG, "Daemon is already works\n");
+        LOG(LOG_LVL::LOGS::DEBUG, "Daemon is already works\n");
         exit(EXIT_FAILURE);
     }
     Server server(_data);
@@ -71,7 +71,7 @@ void set_sid(pid_t sid) {
     sid = setsid();
 
     if (sid < 0) {
-        LOG(LOG_LVL::DEBUG, "Can't start Daemon.\n");
+        LOG(LOG_LVL::LOGS::DEBUG, "Can't start Daemon.\n");
         stop_process();
         exit(EXIT_FAILURE);
     }
@@ -81,7 +81,7 @@ void detach_server_process(const Data _data, pid_t _pid, pid_t _sid) {
     int pid_num = open("a.pid", O_RDONLY);
 
     if (pid_num > 0) {
-        LOG(LOG_LVL::DEBUG, "Daemon is already works\n");
+        LOG(LOG_LVL::LOGS::DEBUG, "Daemon is already works\n");
         exit(EXIT_FAILURE);
     } else {
         set_pid(_pid);
@@ -94,7 +94,6 @@ void detach_server_process(const Data _data, pid_t _pid, pid_t _sid) {
     }
 }
 
-// TODO: should be realized factory method.
 void command_handler(COMMANDS _command, const Data &_data) {
     pid_t pid, sid;
     switch (_command) {

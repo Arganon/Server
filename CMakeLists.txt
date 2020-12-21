@@ -8,13 +8,19 @@ set (CMAKE_CXX_FLAGS_DEBUG_INIT "-Wall -pedantic")
 
 set (SOURCE paramparser.cpp
             server.cpp
-            threadpool.cpp)
+            threadpool.cpp
+            requesthandler.cpp
+            session.cpp
+            storage.cpp)
 
 set (HEADERS paramparser.h
              logger.h
              server.h
              threadpool.h
-             types.h)
+             types.h
+             requesthandler.h
+             session.h
+             storage.h)
 
 set (SOURCE_FILES main.cpp ${SOURCE} ${HEADERS})
 
