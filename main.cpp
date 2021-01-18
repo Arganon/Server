@@ -8,23 +8,26 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include "paramparser.h"
-#include "logger.h"
+#include "utils/public/paramparser.h"
+#include "utils/public/logger.h"
+#include "data/public/types.h"
+#include "data/public/data_structures.h"
 #include "server.h"
 
 
-void run_server(const Data &_data) {
+void run_server(const ServerConnectInfo & _data) {
     int pid_num = open("a.pid", O_RDONLY);
 
     if (pid_num > 0) {
         LOG(LOG_LVL::LOGS::DEBUG, "Daemon is already works\n");
         exit(EXIT_FAILURE);
     }
+
     Server server(_data);
     server.run();
 }
 
-void print_help() {
+void print_help(void) {
     std::cout << "The list of the commands:\n-h or --help to get this list." << std::endl;
     std::cout << "-r or --run to run the server." << std::endl;
     std::cout << "-p or --port to set the listen port for the server." << std::endl;
@@ -32,8 +35,8 @@ void print_help() {
     std::cout << "-s or --stop to stop the server." << std::endl;
 }
 
-void stop_process() {
-    int del_pid_file = remove("a.pid");
+void stop_process(void) {
+    remove("a.pid");
     exit(EXIT_SUCCESS);
 }
 
@@ -41,6 +44,7 @@ void stop_daemon(pid_t pid) {
     int len;
     char pid_buf[20];
     int pid_num = open("a.pid", O_RDONLY);
+
     if (pid != 0) {
         len = read(pid_num, pid_buf, 16);
         pid_buf[len] = 0;
@@ -54,14 +58,17 @@ void stop_daemon(pid_t pid) {
 
 void set_pid(pid_t pid) {
     pid = fork();
+
     if (pid != 0) {
         FILE *pid_file = fopen("a.pid", "w");	/* file where we writing daemon process number */
         fprintf(pid_file, "%d\n", pid);
     }
+
     if (pid < 0) {
         stop_process();
         exit(EXIT_FAILURE);
     }
+
     if (pid > 0) {
         exit(EXIT_SUCCESS);
     }
@@ -77,7 +84,7 @@ void set_sid(pid_t sid) {
     }
 }
 
-void detach_server_process(const Data _data, pid_t _pid, pid_t _sid) {
+void detach_server_process(const ServerConnectInfo _data, pid_t _pid, pid_t _sid) {
     int pid_num = open("a.pid", O_RDONLY);
 
     if (pid_num > 0) {
@@ -94,8 +101,9 @@ void detach_server_process(const Data _data, pid_t _pid, pid_t _sid) {
     }
 }
 
-void command_handler(COMMANDS _command, const Data &_data) {
+void command_handler(COMMANDS _command, const ServerConnectInfo &_data) {
     pid_t pid, sid;
+
     switch (_command) {
     case COMMANDS::RUN:
         run_server(_data);
@@ -118,7 +126,7 @@ void command_handler(COMMANDS _command, const Data &_data) {
 int main(int argc,char *argv[]) {
 
     if (argc > 1) {
-        Data data;
+        ServerConnectInfo data;
         ParamParser param_parser;
         auto command = param_parser.parse_params(argc, argv, data);
         command_handler(command, data);
