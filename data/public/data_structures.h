@@ -167,7 +167,7 @@ explicit ClientEncrypted(int _fd,
 	init_ssl(_path_to_cert, _path_to_key);
 }
 
-/// @brief Custom Constructor.
+/// @brief Custom Destructor.
 ~ClientEncrypted() {
 	SSL_shutdown(m_ssl);
 	if (m_ssl_ctx != nullptr) {
